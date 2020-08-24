@@ -261,3 +261,68 @@ bp +
 #### END ####
 
 #### Faceted ####
+library(ggpubr)
+library(rstatix)
+
+# Transform `dose` into factor variable
+df <- ToothGrowth
+df$dose <- as.factor(df$dose)
+# Add a random grouping variable
+df$group <- factor(rep(c("grp1", "grp2"), 30))
+head(df, 20)
+
+stat.test <- df %>%
+  group_by(dose) %>%
+  t_test(len ~ supp) %>%
+  adjust_pvalue(method = "bonferroni") %>%
+  add_significance()
+stat.test 
+
+# Create a box plot
+bxp <- ggboxplot(
+  df, x = "supp", y = "len", fill = "#00AFBB", 
+  facet.by = "dose"
+)
+bxp
+
+# Make facet and add p-values
+stat.test <- stat.test %>% add_xy_position(x = "supp")
+bxp + stat_pvalue_manual(stat.test)
+
+# Make the facet scale free and add jitter points
+# Move down the bracket using `bracket.nudge.y`
+# Hide ns (non-significant)
+# Show adjusted p-values and significance levels
+# Add 10% spaces between the p-value labels and the plot border
+bxp <- ggboxplot(
+  df, x = "supp", y = "len", fill = "#00AFBB", 
+  facet.by = "dose", scales = "free", add = "jitter"
+)
+bxp
+
+bxp +  
+  stat_pvalue_manual(
+    stat.test, bracket.nudge.y = -2, hide.ns = TRUE,
+    label = "{p.adj}{p.adj.signif}"
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1)))
+
+# Create a bar plot with error bars (mean +/- sd)
+bp <- ggbarplot(
+  df, x = "supp", y = "len", add = "mean_sd", 
+  fill = "#00AFBB", facet.by = "dose"
+)
+bp
+# Add p-values onto the bar plots
+stat.test <- stat.test %>% add_xy_position(fun = "mean_sd", x = "supp")
+bp + stat_pvalue_manual(stat.test)
+
+# Create a bar plot with error bars (mean +/- sd)
+bp <- ggbarplot(
+  df, x = "supp", y = "len", add = c("mean_sd"), 
+  fill = "#00AFBB", facet.by = "dose"
+)
+
+# Add p-values onto the bar plots
+stat.test <- stat.test %>% add_xy_position(fun = "max", x = "supp")
+bp + stat_pvalue_manual(stat.test)
