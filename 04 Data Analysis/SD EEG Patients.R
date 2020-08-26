@@ -2,6 +2,8 @@ library(skimr)
 library(rstatix)
 library(ggpubr)
 library(glue)
+library(ggsignif)
+library(magrittr)
 library(tidyverse)
 sd_raw <- readxl::read_xls("EEG Patients.xls")
 colnames(sd_raw) <- make.names(colnames(sd_raw))
@@ -22,7 +24,8 @@ sdProcessed <- sd_raw %>%
   mutate(relPower = absPower / powerSum * 100) %>% 
   ungroup()
 
-sdLong <- sdProcessed %>% dplyr::select(id, Grouping, SleepStage, Location, Band, relPower, bmi, age, tst, sleepEff, sleepLatency, N1P, N2P, N3P, REMP, REMLatency, ODI, AHI, ArI1, ArI2, epworth, education, mmse, pisq, moca)
+sdProcessed %>% glimpse
+sdLong <- sdProcessed %>% dplyr::select(id, Grouping, SleepStage, Location, Band, relPower, bmi, age, tst, sleepEff, sleepLatency, N1P, N2P, N3P, REMP, REMLatency, ODI, AHI, ArI, ArI.normalized, epworth, education, mmse, pisq, moca)
 sd <- sdLong %>% dplyr::select(id, Grouping, SleepStage, Location, Band, relPower, AHI)
 
 

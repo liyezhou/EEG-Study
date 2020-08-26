@@ -1,0 +1,204 @@
+$delta
+Linear mixed-effects model fit by REML
+ Data: .x 
+       AIC      BIC    logLik
+  755.5689 785.1456 -369.7844
+
+Random effects:
+ Formula: ~1 | id
+        (Intercept)  Residual
+StdDev:   0.3359331 0.7377977
+
+Fixed effects: relPower ~ Location * Grouping 
+                                                Value Std.Error  DF   t-value p-value
+(Intercept)                                 21.391526 0.1266064 149 168.96086  0.0000
+LocationOccipital                           -0.282508 0.1629522 149  -1.73369  0.0850
+GroupingMild/Moderate OSA                   -0.550608 0.1741151 149  -3.16232  0.0019
+GroupingSevere OSA                          -0.893850 0.1616784 149  -5.52857  0.0000
+LocationOccipital:GroupingMild/Moderate OSA  0.195808 0.2240996 149   0.87376  0.3837
+LocationOccipital:GroupingSevere OSA         0.298314 0.2080926 149   1.43356  0.1538
+ Correlation: 
+                                            (Intr) LctnOc GM/MOS GrSOSA LO:GMO
+LocationOccipital                           -0.644                            
+GroupingMild/Moderate OSA                   -0.727  0.468                     
+GroupingSevere OSA                          -0.783  0.504  0.569              
+LocationOccipital:GroupingMild/Moderate OSA  0.468 -0.727 -0.644 -0.366       
+LocationOccipital:GroupingSevere OSA         0.504 -0.783 -0.366 -0.644  0.569
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-2.93597942 -0.49989987 -0.06686326  0.42203889  5.12345489 
+
+Number of Observations: 304
+Number of Groups: 152 
+
+$theta
+Linear mixed-effects model fit by REML
+ Data: .x 
+       AIC      BIC    logLik
+  722.7549 752.3317 -353.3775
+
+Random effects:
+ Formula: ~1 | id
+        (Intercept) Residual
+StdDev:   0.2390573 0.724975
+
+Fixed effects: relPower ~ Location * Grouping 
+                                                Value Std.Error  DF   t-value p-value
+(Intercept)                                 18.939153 0.1192187 149 158.86058  0.0000
+LocationOccipital                           -0.289017 0.1601202 149  -1.80500  0.0731
+GroupingMild/Moderate OSA                   -0.524407 0.1639552 149  -3.19848  0.0017
+GroupingSevere OSA                          -0.815675 0.1522442 149  -5.35768  0.0000
+LocationOccipital:GroupingMild/Moderate OSA  0.498524 0.2202048 149   2.26391  0.0250
+LocationOccipital:GroupingSevere OSA         0.773455 0.2044760 149   3.78262  0.0002
+ Correlation: 
+                                            (Intr) LctnOc GM/MOS GrSOSA LO:GMO
+LocationOccipital                           -0.672                            
+GroupingMild/Moderate OSA                   -0.727  0.488                     
+GroupingSevere OSA                          -0.783  0.526  0.569              
+LocationOccipital:GroupingMild/Moderate OSA  0.488 -0.727 -0.672 -0.382       
+LocationOccipital:GroupingSevere OSA         0.526 -0.783 -0.382 -0.672  0.569
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-2.55363642 -0.54547691  0.05093433  0.56112101  3.71357767 
+
+Number of Observations: 304
+Number of Groups: 152 
+
+$alpha
+Linear mixed-effects model fit by REML
+ Data: .x 
+       AIC      BIC    logLik
+  683.6786 713.2553 -333.8393
+
+Random effects:
+ Formula: ~1 | id
+        (Intercept)  Residual
+StdDev:  0.06219056 0.7104962
+
+Fixed effects: relPower ~ Location * Grouping 
+                                                Value Std.Error  DF   t-value p-value
+(Intercept)                                 17.493680 0.1113851 149 157.05580  0.0000
+LocationOccipital                            0.397518 0.1569223 149   2.53322  0.0123
+GroupingMild/Moderate OSA                   -0.044666 0.1531821 149  -0.29159  0.7710
+GroupingSevere OSA                           0.057926 0.1422406 149   0.40724  0.6844
+LocationOccipital:GroupingMild/Moderate OSA -0.378850 0.2158070 149  -1.75551  0.0812
+LocationOccipital:GroupingSevere OSA        -0.407842 0.2003923 149  -2.03522  0.0436
+ Correlation: 
+                                            (Intr) LctnOc GM/MOS GrSOSA LO:GMO
+LocationOccipital                           -0.704                            
+GroupingMild/Moderate OSA                   -0.727  0.512                     
+GroupingSevere OSA                          -0.783  0.552  0.569              
+LocationOccipital:GroupingMild/Moderate OSA  0.512 -0.727 -0.704 -0.401       
+LocationOccipital:GroupingSevere OSA         0.552 -0.783 -0.401 -0.704  0.569
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-2.10295770 -0.63000690  0.03501292  0.49098239  3.72783898 
+
+Number of Observations: 304
+Number of Groups: 152 
+
+$sigma
+Linear mixed-effects model fit by REML
+ Data: .x 
+      AIC      BIC   logLik
+  761.766 791.3428 -372.883
+
+Random effects:
+ Formula: ~1 | id
+        (Intercept)  Residual
+StdDev: 0.000168133 0.8130434
+
+Fixed effects: relPower ~ Location * Grouping 
+                                                Value Std.Error  DF   t-value p-value
+(Intercept)                                 16.047844 0.1269761 149 126.38480  0.0000
+LocationOccipital                            0.468953 0.1795712 149   2.61152  0.0099
+GroupingMild/Moderate OSA                    0.112504 0.1746234 149   0.64427  0.5204
+GroupingSevere OSA                           0.323105 0.1621504 149   1.99262  0.0481
+LocationOccipital:GroupingMild/Moderate OSA -0.045325 0.2469548 149  -0.18353  0.8546
+LocationOccipital:GroupingSevere OSA        -0.332732 0.2293153 149  -1.45098  0.1489
+ Correlation: 
+                                            (Intr) LctnOc GM/MOS GrSOSA LO:GMO
+LocationOccipital                           -0.707                            
+GroupingMild/Moderate OSA                   -0.727  0.514                     
+GroupingSevere OSA                          -0.783  0.554  0.569              
+LocationOccipital:GroupingMild/Moderate OSA  0.514 -0.727 -0.707 -0.403       
+LocationOccipital:GroupingSevere OSA         0.554 -0.783 -0.403 -0.707  0.569
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-2.72183944 -0.59530305 -0.09709716  0.43769223  3.93687836 
+
+Number of Observations: 304
+Number of Groups: 152 
+
+$beta
+Linear mixed-effects model fit by REML
+ Data: .x 
+       AIC      BIC    logLik
+  711.3042 740.8809 -347.6521
+
+Random effects:
+ Formula: ~1 | id
+         (Intercept)  Residual
+StdDev: 3.948482e-05 0.7470388
+
+Fixed effects: relPower ~ Location * Grouping 
+                                                Value Std.Error  DF   t-value p-value
+(Intercept)                                 14.737615 0.1166679 149 126.32112  0.0000
+LocationOccipital                           -0.209872 0.1649933 149  -1.27200  0.2054
+GroupingMild/Moderate OSA                    0.326865 0.1604471 149   2.03721  0.0434
+GroupingSevere OSA                           0.400160 0.1489867 149   2.68588  0.0081
+LocationOccipital:GroupingMild/Moderate OSA -0.206074 0.2269065 149  -0.90819  0.3652
+LocationOccipital:GroupingSevere OSA        -0.054529 0.2106990 149  -0.25880  0.7961
+ Correlation: 
+                                            (Intr) LctnOc GM/MOS GrSOSA LO:GMO
+LocationOccipital                           -0.707                            
+GroupingMild/Moderate OSA                   -0.727  0.514                     
+GroupingSevere OSA                          -0.783  0.554  0.569              
+LocationOccipital:GroupingMild/Moderate OSA  0.514 -0.727 -0.707 -0.403       
+LocationOccipital:GroupingSevere OSA         0.554 -0.783 -0.403 -0.707  0.569
+
+Standardized Within-Group Residuals:
+         Min           Q1          Med           Q3          Max 
+-2.981119349 -0.642737010 -0.004912533  0.550107087  5.487355175 
+
+Number of Observations: 304
+Number of Groups: 152 
+
+$gamma
+Linear mixed-effects model fit by REML
+ Data: .x 
+       AIC      BIC    logLik
+  826.9669 856.5437 -405.4835
+
+Random effects:
+ Formula: ~1 | id
+        (Intercept)  Residual
+StdDev:    0.798823 0.6348706
+
+Fixed effects: relPower ~ Location * Grouping 
+                                                Value Std.Error  DF  t-value p-value
+(Intercept)                                 11.390182 0.1593568 149 71.47595  0.0000
+LocationOccipital                           -0.085075 0.1402194 149 -0.60672  0.5450
+GroupingMild/Moderate OSA                    0.680312 0.2191550 149  3.10425  0.0023
+GroupingSevere OSA                           0.928334 0.2035012 149  4.56181  0.0000
+LocationOccipital:GroupingMild/Moderate OSA -0.064083 0.1928364 149 -0.33232  0.7401
+LocationOccipital:GroupingSevere OSA        -0.276666 0.1790624 149 -1.54508  0.1244
+ Correlation: 
+                                            (Intr) LctnOc GM/MOS GrSOSA LO:GMO
+LocationOccipital                           -0.440                            
+GroupingMild/Moderate OSA                   -0.727  0.320                     
+GroupingSevere OSA                          -0.783  0.345  0.569              
+LocationOccipital:GroupingMild/Moderate OSA  0.320 -0.727 -0.440 -0.251       
+LocationOccipital:GroupingSevere OSA         0.345 -0.783 -0.251 -0.440  0.569
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-2.29328328 -0.42708781 -0.05793414  0.34654737  4.32721966 
+
+Number of Observations: 304
+Number of Groups: 152 
+
