@@ -98,28 +98,100 @@ geom_text(data = ~(print(.x)))
 
 #### Correlation between relPower and clinical variables ####
 
+## Correlation Matrix
 sdProcessed %>% filter(Location == "Frontal", SleepStage == "REM") %>% 
   group_by(Band) %>% 
-  select(relPower, ArI, TS90, MinSaO2, ODI, epworth, mmse, pisq, AHI, Band) %>% 
+  select(relPower, ArI, TS90, MinSaO2, ODI, epworth, N1P, N2P, REMP, sleepEff, AHI, Band) %>% 
   # nest() %>% 
   group_walk(
-    ~PerformanceAnalytics::chart.Correlation(.x, method = "kendall")
-      # plotExport(glue("export/0{.y} {.y[[1]]}.pdf"))
+    ~PerformanceAnalytics::chart.Correlation(.x, method = "pearson") %>% 
+      plotExport(glue("export/0{.y} {.y[[1]]}.pdf"))
   )
 
-# RelPower & Specific Items
-sdProcessed %>% filter(Location == "Frontal", SleepStage == "REM") %>% 
-  select(relPower, ArI, TS90, MinSaO2, ODI, epworth, mmse, pisq, AHI, Band) %>% 
-  group_by(Band) %>%
+## Linear Model: RelPower & Specific Items
+lm.metrics <- sdProcessed %>% filter(Location == "Frontal", SleepStage == "REM") %>% 
+  select(relPower, ArI, TS90, MinSaO2, ODI, N2P, sleepEff, Band) %>% 
+  pivot_longer(cols = c(ArI, TS90, MinSaO2, ODI, N2P, sleepEff), names_to = "Metric", values_to = "value") %>% 
+  group_by(Band, Metric) %>%
   group_map(
-    ~lm(relPower ~ ArI, data = .x) %>% summary
+    ~{
+      lm(value ~ scale(relPower), data = .x) %>% {bind_cols(.y, tidy(., conf.int = T)[2,] %>% add_significance("p.value"))}
+    }
     # ~broom::tidy(lm(relPower ~ ArI, data = .x))
-  )
+  ) %>% bind_rows() %>% mutate(Y = Metric , X = "relPower") %>% select(Band, Y, X, estimate, p.value, p.value.signif)
 
-a <- sd %>% 
-  filter(SleepStage == "REM", Band == "delta")
+lm.metrics %>% knitr::kable(caption = "Frontal, REM Sleep: predictive power of Relative Power (scaled to mean=0, SD=1)")
 
-ggexport(b, filename = "LOL.pdf")
-plot(a$relPower, a$AHI) %>% plotExport("test.pdf")
+# sdProcessed  %>% filter(Band == "delta", Location == "Frontal", SleepStage == "REM") %>% Hmisc::rcorr(relPower ~ AHI, data = .) %>% summary
 
-# ArI, ts90, avgSaO2, minSaO2, ODI, ESS
+## Correlation Test: RelPower & Specific Items
+corr.metrics <- sdProcessed %>% filter(Location == "Frontal", SleepStage == "REM") %>% 
+  select(relPower, ArI, TS90, MinSaO2, ODI, N2P, sleepEff, Band) %>% 
+  pivot_longer(cols = c(ArI, TS90, MinSaO2, ODI, N2P, sleepEff), names_to = "Metric", values_to = "value") %>% 
+  group_by(Band, Metric) %>%
+  group_map(
+    ~{
+      Hmisc::rcorr(.x$relPower, .x$value) %>% 
+      {bind_cols(.y, tidy(.) %>% add_significance("p.value"))}
+    }
+    # ~broom::tidy(lm(relPower ~ ArI, data = .x))
+  ) %>% bind_rows() %>% mutate(Y = "relPower" , X = Metric, R = estimate, R.squared = estimate ^ 2) %>% 
+  select(Band, Y, X, n, R, R.squared, p.value, p.value.signif)
+
+corr.metrics %>%  knitr::kable(caption = "Frontal, REM Sleep: correlation with Relative Power")
+
+# sdProcessed  %>% filter(Band == "delta", Location == "Frontal", SleepStage == "REM") %$% cor.test(relPower, ArI)
+
+## Correlation Plot: RelPower & Specific Items
+sdProcessed %>% filter(Location == "Frontal", SleepStage == "REM") %>% 
+  select(relPower, ArI, TS90, MinSaO2, ODI, N2P, sleepEff, Band) %>% 
+  pivot_longer(cols = c(ArI, ODI, N2P), names_to = "Metric", values_to = "value") %>% 
+  filter(Band %!in% c("sigma", "alpha")) %>% 
+  # group_by(Band, Metric) %>%
+  # nest() %>% 
+  # {.$data[[1]]} %>% 
+  # ggscatter(x = "relPower", y = "value",
+  #           # palette = "jco",
+  #           add = "reg.line", conf.int = TRUE)
+  ggplot(palette = "jco") + aes(value, relPower) + geom_point(size = 0.6, color = "#888888") +
+  geom_smooth(method=lm, formula = y ~ x) + 
+  xlab("Value of ArI, N2P or ODI") +
+  ylab("Relative Power (%)") +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., cut(..p.., 
+                                          breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
+                                          labels = c("'***'", "'**'", "'*'", "''")), 
+                        sep = "~")),
+           label.x.npc = "right", hjust = "right"
+           ) +
+  facet_wrap(~Band + Metric, scales = "free", ncol = 3)
+ggsave(filename = "Correlation Plots - ODI, ArI, N2P.pdf", width = 9, height = 12)
+  
+## Comorbidities
+comorbidity.t.test <- sdProcessed %>% filter(Location == "Frontal", SleepStage == "REM") %>% 
+  select(relPower, ArI, TS90, MinSaO2, ODI, N2P, sleepEff, Band) %>% 
+  pivot_longer(cols = c(ArI, TS90, MinSaO2, ODI, N2P, sleepEff), names_to = "Metric", values_to = "value") %>% 
+  group_by(Band, Metric) %>%
+  group_map(
+    ~{
+      Hmisc::rcorr(.x$relPower, .x$value) %>% 
+        {bind_cols(.y, tidy(.) %>% add_significance("p.value"))}
+    }
+    # ~broom::tidy(lm(relPower ~ ArI, data = .x))
+  ) %>% bind_rows() %>% mutate(Y = "relPower" , X = Metric, R = estimate, R.squared = estimate ^ 2) %>% 
+  select(Band, Y, X, n, R, R.squared, p.value, p.value.signif)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
