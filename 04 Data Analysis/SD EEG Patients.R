@@ -7,6 +7,11 @@ library(magrittr)
 library(tidyverse)
 sd_raw <- readxl::read_xls("EEG Patients.xls")
 colnames(sd_raw) <- make.names(colnames(sd_raw))
+sd_raw
+# Get Phenotype
+sdPhenotype <- sd_raw %>% 
+  select(-c(R.f.d:NR.o.g)) %>% 
+  mutate(Grouping = fct_recode(as.factor(Grouping), "Snoring only" = "1", "Mild/Moderate OSA" = "2", "Severe OSA" = "3")) 
 
 # Tidy Data
 sdProcessed <- sd_raw %>% 

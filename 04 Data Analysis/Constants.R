@@ -16,6 +16,6 @@ pasteFormula <- function(y, x) {
 
 # Negation of %in%
 '%!in%' <- function(x,y)!('%in%'(x,y))
-# Adding a printing pipe
-'%P>%' <- function(lhs, rhs) {lhs %T>% {print(rhs(.)) } }
 
+# Adding a printing pipe
+'%P>%' <- function(lhs, rhs) {lhs %T>% {print(rhs(.))} }
