@@ -21,14 +21,19 @@ sdProcessed <- sd_raw %>%
          Location = factor(fct_recode(Location, Frontal = "f", Central = "c", Occipital = "o"), levels = c("Frontal", "Central", "Occipital")),
          Band = factor(fct_recode(Band, alpha = "a", theta = "t", beta = "b",  sigma = "s", delta = "d", gamma = "g"), levels = c("delta", "theta", "alpha", "sigma", "beta", "gamma")),
          Grouping = fct_recode(as.factor(Grouping), "Snoring only" = "1", "Mild-Moderate OSA" = "2", "Severe OSA" = "3")) %>% 
+  # filter(Band != "gamma") %>% 
   group_by(id, SleepStage, Location) %>% 
-  mutate(powerSum = sum(absPower), num = n()) %>% 
+  mutate(powerSum = sum(absPower), num = n(),
+         slowWave = sum(absPower[Band %in% c("delta", "theta")]),
+         fastWave = sum(absPower[Band %in% c("alpha", "sigma", "beta")]),
+         slowingRatio = slowWave / fastWave * 100,
+         DAR = absPower[Band == "delta"] / absPower[Band == "alpha"]
+         ) %>% 
   ungroup() %>% 
   arrange(id, SleepStage, Location) %>% 
-  group_by(SleepStage, Location, Band) %>% 
-  mutate(relPower = absPower / powerSum * 100) %>% 
-  ungroup()
+  mutate(relPower = absPower / powerSum * 100)
+
 
 sdProcessed %>% glimpse
-sdLong <- sdProcessed %>% dplyr::select(id, Grouping, SleepStage, Location, Band, relPower, absPower, bmi, age, tst, sleepEff, sleepLatency, N1P, N2P, N3P, REMP, REMLatency, ODI, AHI, ArI, ArI.normalized, epworth, education, mmse, pisq, moca)
-sd <- sdLong %>% dplyr::select(id, Grouping, SleepStage, Location, Band, relPower, absPower, AHI)
+sdLong <- sdProcessed %>% dplyr::select(id, Grouping, SleepStage, Location, Band, relPower, absPower, bmi, age, tst, sleepEff, sleepLatency, N1P, N2P, N3P, REMP, REMLatency, ODI, AHI, ArI, ArI.normalized, epworth, education, mmse, pisq, moca, slowWave, fastWave, slowingRatio, DAR)
+sd <- sdLong %>% dplyr::select(id, Grouping, SleepStage, Location, Band, relPower, absPower, slowWave, fastWave, slowingRatio, DAR, AHI)

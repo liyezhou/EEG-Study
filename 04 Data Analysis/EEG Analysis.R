@@ -23,7 +23,7 @@ bxp <- ggbarplot(
   palette = "jco", facet.by = c("Location","SleepStage"), 
   xlab = "Frequency Bands", ylab = "Relative Power (%)",
   position = position_dodge(0.8)
-) %>% ggpar(ylim = c(9, 24))
+) %>% ggpar(ylim = c(13, 28))
 bxp
 
 
@@ -42,8 +42,8 @@ bxp
 sd.test <- sd %>%
   group_by(Location, SleepStage, Band) %>%
   t_test(relPower ~ Grouping)
-sd.test$.y. <- NULL
-write.table(sd.test, "T Test Results.txt")
+# sd.test$.y. <- NULL
+# write.table(sd.test, "T Test Results.txt")
 
 sd.test <- sd.test %>%
   add_xy_position(x = "Band", dodge = 0.8, step.increase = 0.05, fun = "mean_ci")
@@ -57,7 +57,7 @@ sd.test <- sd.test %>%
   scale_y_continuous(expand = expansion(mult = c(0, 0))))
 # dev.off()
 
-ggexport(bxp.complex, width = 9, height = 12, pointsize = 30, filename = "relPowerVSband_All_Bar.pdf")
+ggexport(bxp.complex, width = 9, height = 12, pointsize = 30, filename = "relPowerVSband_All_Bar_noGama.pdf")
 gc()
 
 #### Using absPower ####
@@ -86,8 +86,8 @@ bxp
 sd.test <- sd %>%
   group_by(Location, SleepStage, Band) %>%
   t_test(absPower ~ Grouping)
-sd.test$.y. <- NULL
-write.table(sd.test, "T Test Results.txt")
+# sd.test$.y. <- NULL
+# write.table(sd.test, "T Test Results.txt")
 
 sd.test <- sd.test %>%
   add_xy_position(x = "Band", dodge = 0.8, step.increase = 0.05, fun = "mean_ci")
@@ -101,7 +101,7 @@ sd.test <- sd.test %>%
     scale_y_continuous(expand = expansion(mult = c(0, 0))))
 # dev.off()
 
-ggexport(bxp.complex, width = 9, height = 12, pointsize = 30, filename = "absPowerVSband_All_Bar.pdf")
+ggexport(bxp.complex, width = 9, height = 12, pointsize = 30, filename = "absPowerVSband_All_Bar_absPower.pdf")
 gc()
 
 ####  Post Hoc Analysis to determine if the change in relPower is significantly different between locations ####
@@ -140,6 +140,33 @@ sd %>%
 # geom_text(data = ann_text, label = "HAHA")
 geom_text(data = ~(print(.x)))
 
+
+#### slowing Ratio and DAR ####
+sd %>%
+  ggplot() + aes(y = slowingRatio, x = AHI) + 
+  geom_point() + 
+  geom_smooth(method = lm, formula = y~x) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., cut(..p.., 
+                                                           breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
+                                                           labels = c("'***'", "'**'", "'*'", "''")), 
+                             sep = "~")),
+           method = "pearson",
+           label.x.npc = "right", hjust = "right"
+  ) +
+  facet_wrap(~SleepStage+Location)
+
+sd %>%
+  ggplot() + aes(y = DAR, x = AHI) + 
+  geom_point() + 
+  geom_smooth(method = lm, formula = y~x) +
+  stat_cor(aes(label = paste(..r.label.., ..p.label.., cut(..p.., 
+                                                           breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
+                                                           labels = c("'***'", "'**'", "'*'", "''")), 
+                             sep = "~")),
+           method = "pearson",
+           label.x.npc = "right", hjust = "right"
+  ) +
+  facet_wrap(~SleepStage+Location)
 
 
 
